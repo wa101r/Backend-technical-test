@@ -8,12 +8,31 @@
 - ตั้งประกาศซื้อ/ขาย Cryptocurrencies แบบ P2P (BTC, ETH, XRP, DOGE) ด้วยเงิน Fiat (THB, USD)
 - ระบบบันทึกการจับคู่ซื้อ-ขาย (P2P Trades)
 - ระบบบันทึกประวัติการฝาก/ถอน/โอนภายในระบบ (Transactions)
+- ระบบ Escrow ล็อคเหรียญระหว่างรอการชำระเงิน
 
-## โครงสร้างระบบ (System Architecture)
+## โครงสร้างฐานข้อมูล (Database Structure)
 
-- **ER Diagram:** สามารถดูโครงสร้างความสัมพันธ์ของตารางทั้งหมดในรูปแบบตัวอักษรทาง `er-diagram.md`
-- **Models & Relationships:** กำหนดแบบ One-to-Many ไว้ครบถ้วน (ตัวอย่างเช่นระหว่าง User กับ Wallet, Order, Trade และ Transaction)
-- **Seeders:** มีการจำลองข้อมูลทุกตารางเพื่อให้สามารถทดสอบได้ทันที
+ER Diagram ฉบับเต็มดูได้ที่ `er-diagram.md`
+
+| ตาราง | หน้าที่ | ฟิลด์สำคัญ |
+|---|---|---|
+| `users` | ข้อมูลผู้ใช้งาน | username, email, password |
+| `wallets` | กระเป๋าเงิน (1 คน = 6 กระเป๋า) | currency_code, balance, locked_balance |
+| `p2p_orders` | ประกาศซื้อ/ขาย P2P | type(BUY/SELL), crypto_currency, price, min/max_limit |
+| `p2p_trades` | การจับคู่ซื้อขาย | buyer_id, seller_id, escrow_locked, payment_proof |
+| `transactions` | ประวัติธุรกรรมทั้งหมด | type(DEPOSIT/WITHDRAW/TRANSFER), currency_code, reference_id |
+
+### ความสัมพันธ์ (Relationships)
+- `User` → hasMany → `Wallet`, `P2pOrder`, `P2pTrade`, `Transaction`
+- `P2pOrder` → hasMany → `P2pTrade`
+- `Wallet` → hasMany → `Transaction`
+
+### Flow การเทรด P2P (Escrow)
+```
+ผู้ขายตั้งประกาศ → ผู้ซื้อกดซื้อ → ล็อคเหรียญ (Escrow)
+→ ผู้ซื้อโอนเงิน + กด PAID → ผู้ขายตรวจสอบ + กด RELEASED
+→ ปลดล็อคเหรียญไปเข้ากระเป๋าผู้ซื้อ ✅
+```
 
 ## ขั้นตอนการติดตั้งและรันโปรเจค (How to Run)
 
