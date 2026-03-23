@@ -20,6 +20,8 @@ return new class extends Migration
             $table->decimal('price', 18, 8);
             $table->decimal('total_amount', 18, 8);
             $table->decimal('remaining_amount', 18, 8);
+            $table->decimal('min_limit', 18, 8)->nullable();
+            $table->decimal('max_limit', 18, 8)->nullable();
             $table->enum('status', ['OPEN', 'COMPLETED', 'CANCELLED'])->default('OPEN');
             $table->timestamps();
         });

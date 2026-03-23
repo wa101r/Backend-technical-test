@@ -19,6 +19,8 @@ class P2pOrder extends Model
         'price',
         'total_amount',
         'remaining_amount',
+        'min_limit',
+        'max_limit',
         'status',
     ];
 

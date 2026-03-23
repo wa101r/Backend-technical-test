@@ -16,7 +16,17 @@ class P2pTrade extends Model
         'seller_id',
         'crypto_amount',
         'fiat_amount',
+        'payment_proof',
+        'escrow_locked',
         'status',
+        'paid_at',
+        'released_at',
+    ];
+
+    protected $casts = [
+        'escrow_locked' => 'boolean',
+        'paid_at' => 'datetime',
+        'released_at' => 'datetime',
     ];
 
     /**

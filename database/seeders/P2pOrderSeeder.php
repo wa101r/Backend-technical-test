@@ -25,6 +25,8 @@ class P2pOrderSeeder extends Seeder
             'price' => 1500000,
             'total_amount' => 0.5,
             'remaining_amount' => 0.5,
+            'min_limit' => 0.01,
+            'max_limit' => 0.5,
             'status' => 'OPEN',
         ]);
 
@@ -37,6 +39,8 @@ class P2pOrderSeeder extends Seeder
             'price' => 2500,
             'total_amount' => 2,
             'remaining_amount' => 2,
+            'min_limit' => 0.1,
+            'max_limit' => 2,
             'status' => 'OPEN',
         ]);
     }

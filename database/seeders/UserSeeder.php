@@ -30,11 +30,12 @@ class UserSeeder extends Seeder
                 else if ($currency === 'USD') $balance = 5000;
                 else if ($currency === 'BTC') $balance = 1.5;
                 else if ($currency === 'ETH') $balance = 10;
-                
+
                 Wallet::create([
                     'user_id' => $user->id,
                     'currency_code' => $currency,
                     'balance' => $balance,
+                    'locked_balance' => 0,
                 ]);
             }
         }

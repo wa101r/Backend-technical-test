@@ -39,6 +39,8 @@ class P2pOrderController extends Controller
             'fiat_currency' => 'required|in:THB,USD',
             'price' => 'required|numeric|min:0',
             'total_amount' => 'required|numeric|min:0',
+            'min_limit' => 'nullable|numeric|min:0',
+            'max_limit' => 'nullable|numeric|min:0',
         ]);
 
         $validated['remaining_amount'] = $validated['total_amount'];

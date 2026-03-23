@@ -16,7 +16,10 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->foreignId('wallet_id')->constrained()->cascadeOnDelete();
             $table->enum('type', ['DEPOSIT', 'WITHDRAW', 'TRANSFER_INTERNAL']);
+            $table->enum('currency_code', ['THB', 'USD', 'BTC', 'ETH', 'XRP', 'DOGE']);
             $table->decimal('amount', 18, 8);
+            $table->unsignedBigInteger('reference_id')->nullable();
+            $table->string('reference_type')->nullable();
             $table->foreignId('to_user_id')->nullable()->constrained('users')->nullOnDelete();
             $table->string('to_address')->nullable();
             $table->enum('status', ['PENDING', 'COMPLETED', 'FAILED'])->default('PENDING');

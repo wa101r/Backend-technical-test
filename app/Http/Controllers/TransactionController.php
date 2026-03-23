@@ -43,8 +43,6 @@ class TransactionController extends Controller
             return response()->json(['message' => 'Insufficient balance'], 400);
         }
 
-        $validated['status'] = 'COMPLETED'; // Assuming instant completion for simplified system
-
         // Update balance
         if ($validated['type'] === 'DEPOSIT') {
             $wallet->balance += $validated['amount'];
@@ -53,6 +51,7 @@ class TransactionController extends Controller
         }
         $wallet->save();
 
+        // Internal transfer — credit target user
         if ($validated['type'] === 'TRANSFER_INTERNAL' && isset($validated['to_user_id'])) {
             $targetWallet = Wallet::where('user_id', $validated['to_user_id'])
                 ->where('currency_code', $wallet->currency_code)
@@ -61,19 +60,31 @@ class TransactionController extends Controller
             if ($targetWallet) {
                 $targetWallet->balance += $validated['amount'];
                 $targetWallet->save();
-                
-                // create receiving transaction for the target user
+
+                // Create receiving transaction for the target user
                 Transaction::create([
                     'user_id' => $validated['to_user_id'],
                     'wallet_id' => $targetWallet->id,
                     'type' => 'DEPOSIT',
+                    'currency_code' => $wallet->currency_code,
                     'amount' => $validated['amount'],
-                    'status' => 'COMPLETED'
+                    'reference_type' => 'TRANSFER',
+                    'status' => 'COMPLETED',
                 ]);
             }
         }
 
-        $transaction = Transaction::create($validated);
+        $transaction = Transaction::create([
+            'user_id' => $validated['user_id'],
+            'wallet_id' => $wallet->id,
+            'type' => $validated['type'],
+            'currency_code' => $wallet->currency_code,
+            'amount' => $validated['amount'],
+            'to_user_id' => $validated['to_user_id'] ?? null,
+            'to_address' => $validated['to_address'] ?? null,
+            'reference_type' => $validated['type'],
+            'status' => 'COMPLETED',
+        ]);
 
         return response()->json($transaction, 201);
     }

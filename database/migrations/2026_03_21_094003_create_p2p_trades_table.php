@@ -18,7 +18,11 @@ return new class extends Migration
             $table->foreignId('seller_id')->constrained('users')->cascadeOnDelete();
             $table->decimal('crypto_amount', 18, 8);
             $table->decimal('fiat_amount', 18, 8);
+            $table->string('payment_proof')->nullable();
+            $table->boolean('escrow_locked')->default(false);
             $table->enum('status', ['PENDING', 'PAID', 'RELEASED', 'CANCELLED'])->default('PENDING');
+            $table->timestamp('paid_at')->nullable();
+            $table->timestamp('released_at')->nullable();
             $table->timestamps();
         });
     }

@@ -22,7 +22,9 @@ class TransactionSeeder extends Seeder
             'user_id' => $user1->id,
             'wallet_id' => $thbWallet->id,
             'type' => 'DEPOSIT',
+            'currency_code' => 'THB',
             'amount' => 50000,
+            'reference_type' => 'DEPOSIT',
             'status' => 'COMPLETED',
         ]);
     }

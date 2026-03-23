@@ -24,6 +24,7 @@ class P2pTradeSeeder extends Seeder
             'seller_id' => $order->user_id,
             'crypto_amount' => 0.1,
             'fiat_amount' => 0.1 * $order->price,
+            'escrow_locked' => true,
             'status' => 'PENDING',
         ]);
 

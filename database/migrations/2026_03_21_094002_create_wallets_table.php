@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->enum('currency_code', ['THB', 'USD', 'BTC', 'ETH', 'XRP', 'DOGE']);
             $table->decimal('balance', 18, 8)->default(0);
+            $table->decimal('locked_balance', 18, 8)->default(0);
             $table->timestamps();
         });
     }
